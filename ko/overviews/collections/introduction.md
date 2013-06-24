@@ -1,21 +1,19 @@
 ---
 layout: overview-large
-title: Introduction
+title: 컬렉션 소개
 
 disqus: true
 
 partof: collections
 num: 1
-languages: [ja, ko]
+language: ja
 ---
 
-**Martin Odersky, and Lex Spoon**
+**Martin Odersky와 Lex Spoon**
   
-In the eyes of many, the new collections framework is the most significant
-change in the Scala 2.8 release. Scala had collections before (and in fact the new
-framework is largely compatible with them). But it's only 2.8 that
-provides a common, uniform, and all-encompassing framework for
-collection types.
+대부분의 사람들에게 있어 스칼라 2.8의 가장 중요한 변화는 새 컬렉션 프레임워크일 것이다. 
+스칼라에는 예전부터 컬렉션이 포함되어 있었다(실제 새 프레임워크도 이전 컬렉션과 상당부분 호환성이 있다). 
+하지만 다양한 컬렉션 유형을 포괄하는 일반적이면서 균일한 프레임워크를 제공하는 것은 스칼라 2.8 부터이다.
 
 Even though the additions to collections are subtle at first glance,
 the changes they can provoke in your programming style can be
