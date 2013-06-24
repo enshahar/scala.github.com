@@ -1,26 +1,31 @@
 ---
 layout: overview-large
-title: Trait Traversable
+title: Traversable 트레잇
 
 disqus: true
 
 partof: collections
 num: 3
-languages: [ja, ko]
+language: ko
 ---
 
-At the top of the collection hierarchy is trait `Traversable`. Its only abstract operation is `foreach`:
+컬렉션 계층의 최상위에는 트레잇 `Traversable(방문 가능)`이 있다. 이 트레잇에 
+있는 유일한 추상적인 연산이 바로 `foreach`이다.
 
     def foreach[U](f: Elem => U) 
 
-Collection classes that implement `Traversable` just need to define this method; all other methods can be inherited from `Traverable`.
+`Traversable`을 구현하는 컬렉션 클래스는 단지 이 메소드만 정의하면 된다. 
+다른 메소드는 자동으로 `Traversable`에서 상속된다.
 
-The `foreach` method is meant to traverse all elements of the collection, and apply the given operation, f, to each element. The type of the operation is `Elem => U`, where `Elem` is the type of the collection's elements and `U` is an arbitrary result type. The invocation of `f` is done for its side effect only; in fact any function result of f is discarded by `foreach`.
+`foreach` 메소드는 컬렉션의 모든 원소를 방문하면서 주어진 연산 f를 각 원소에 
+적용한다. 이 연산 f의 타입은 `Elem => U`로 `Elem`은 컬렉션의 원소의 
+타입이며, `U`는 임의의 결과 타입이다. `f`는 부작용을 위해 호출된다. 따라서 
+f가 내놓는 결과값은 `foreach`가 무시한다.
 
-`Traversable` also defines many concrete methods, which are all listed in The following table. These methods fall into the following categories:
+`Traversable`에는 여러 구체적 메소드가 정의되어 있다. 이들은 아래 표에 나열되어 있다. 각 메소드들은 다음과 같은 분류에 속한다.
 
-* **Addition**, `++`, which appends two traversables together, or appends all elements of an iterator to a traversable.
-* **Map** operations `map`, `flatMap`, and `collect`, which produce a new collection by applying some function to collection elements.
+* **합치기**, `++`는 두 방문가능한 객체를 함께 이어붙이거나, 한 반복자의 모든 원소를 다른 방문가능 객체에 추가한다.
+* **맵** 연산인 `map`, `flatMap`, `collect`는 인자로 넘겨진 함수를 컬렉션 원소에 적용한 결과로 이루어진 새 컬렉션을 만들어낸다.
 * **Conversions** `toArray`, `toList`, `toIterable`, `toSeq`, `toIndexedSeq`, `toStream`, `toSet`, `toMap`, which turn a `Traversable` collection into something more specific. All these conversions return their receiver argument unchanged if the run-time type of the collection already matches the demanded collection type. For instance, applying `toList` to a list will yield the list itself.
 * **Copying operations** `copyToBuffer` and `copyToArray`. As their names imply, these copy collection elements to a buffer or array, respectively.
 * **Size info** operations `isEmpty`, `nonEmpty`, `size`, and `hasDefiniteSize`: Traversable collections can be finite or infinite. An example of an infinite traversable collection is the stream of natural numbers `Stream.from(0)`. The method `hasDefiniteSize` indicates whether a collection is possibly infinite. If `hasDefiniteSize` returns true, the collection is certainly finite. If it returns false, the collection has not been not fully elaborated yet, so it might be infinite or finite.
