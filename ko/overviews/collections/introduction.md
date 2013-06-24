@@ -19,7 +19,7 @@ language: ko
 스타일에 미칠 영향은 심오하다. 실제로, 컬렉션의 개별 원소 보다는 전체 컬렉션을 프로그램의 기본 구성 요소로 
 사용해 더 상위 레벨에서 작업하는 것 처럼 느끼게 될 것이다. 이런 프로그래밍 스타일에 익숙해지려면 적응이 필요하다. 
 다행히 새 스칼라 컬렉션이 제공하는 몇몇 특징으로 인해 쉽게 적응할 수 있다. 새 스칼라 컬렉션은 쓰기 쉽고, 
-간결하며, 안전하고, 일반적이다.
+간결하며, 안전하고, 범용이다.
 
 **사용 용이성:** 대부분의 경우 컬렉션과 관련된 문제를 몇 연산을 거쳐 해결하는데 필요한 메소드는 20-50개 정도이다. 복잡하게 루프를 돌거나 재귀 호출을 하기 위해 끙끙거릴 필요가 없다. 
 영속적인 컬렉션과 부작용이 없는 연산을 사용하면 실수로 기존 컬렉션을 오염시킬까 염려할 필요가 없다. 이터레이터와 컬렉션 업데이트간의 간섭도 없다. 
@@ -27,58 +27,36 @@ language: ko
 **간결성:** 하나 이상의 루프를 통해 작업해야 했던 것을 한 단어로 수행할 수 있다. 간결한 문법으로 연산을 표현할 수 있고, 각 연산을 힘들이지 않고 조합할 수 있다. 따라서 
 컬렉션 전용 대수식을 사용하는 것 같은 느낌을 받게될 것이다.
 
-**안전성:** This one has to be experienced to sink in. The
-statically typed and functional nature of Scala's collections means
-that the overwhelming majority of errors you might make are caught at
-compile-time. The reason is that (1) the collection operations
-themselves are heavily used and therefore well
-tested. (2) the usages of the collection operation make inputs and
-output explicit as function parameters and results. (3) These explicit
-inputs and outputs are subject to static type checking. The bottom line
-is that the large majority of misuses will manifest themselves as type
-errors. It's not at all uncommon to have programs of several hundred
-lines run at first try.
+**안전성:** 이를 제대로 인식하려면 경험이 필요하다. 스칼라 컬렉션은 정적 타이핑과 함수적 특성을 가지기 때문에 
+프로그래머가 저지를 수 있는 오류의 대부분을 컴파일시 잡아낼 수 있을 것이다. 이유는 (1) 컬렉션 연산을 많이 사용하기 
+때문에 충분한 테스트가 있루어질 수 있고, (2) 컬렉션 연산을 사용할 때 입력과 출력을 매개 변수로 넘기는 함수와 결과값으로 
+명확히 해야 하며, (3) 이런 명시적인 입/출력이 정적인 타입 검사를 거쳐야 한다는 점 때문이다. 요약하면, 대부분의 잘못된 
+사용은 타입 오류라는 형태로 나타나게 될 것이라는 점이다. 수백줄 짜리 코드가 첫 시도시 실행되는 경우를 보는 것도 전혀 
+드문 일이 아니다. 
 
-**Fast:** Collection operations are tuned and optimized in the
-libraries. As a result, using collections is typically quite
-efficient. You might be able to do a little bit better with carefully
-hand-tuned data structures and operations, but you might also do a lot
-worse by making some suboptimal implementation decisions along the
-way.  What's more, collections have been recently adapted to parallel
-execution on multi-cores. Parallel collections support the same
-operations as sequential ones, so no new operations need to be learned
-and no code needs to be rewritten. You can turn a sequential collection into a
-parallel one simply by invoking the `par` method.
+**속도:** 라이브라리 안의 컬렉션 연산은 최적화와 미세조정이 이루어져 있다. 그 결과 컬렉션을 사용하는 것은 
+보통 꽤 효율적이다. 손으로 직접 주의깊게 미세조정을 거친 데이터 구조와 연산을 사용하면 조금 더 나은 결과를 
+얻을 수도 있을 것이다. 하지만 구현 도중에 최적이 아닌 선택을 하거나 해서 훨씬 더 나쁜 결과를 가져올 수도 있다. 
+더 나아가, 최근에는 다중코어 시스템에서 병렬로 수행되도록 하는 컬렉션이 도입되었다. 병렬 컬렉션은 순차적 컬렉션과 
+동일한 연산을 지원한다. 따라서 새로운 연산을 배우거나 코드를 재작성할 필요가 없다. 순차적 컬렉션을 병렬 켤렉션으로 
+변경하려면 단지 `par` 메소드를 호출하기만 하면 된다.
 
-**Universal:** Collections provide the same operations on
-any type where it makes sense to do so. So you can achieve a lot with
-a fairly small vocabulary of operations. For instance, a string is
-conceptually a sequence of characters. Consequently, in Scala
-collections, strings support all sequence operations. The same holds
-for arrays.
+**범용:** 어떤 컬렉션 연산이든, 그 연산을 제공하는 것이 합리적인 모든 컬렉션에서 이를 제공하게 되어 있다. 
+따라서 아주 작은 연산들만 알고 있어도 많은 일을 할 수 있다. 예를 들어 문자열은 개념적으로 문자의 시퀀스이다. 따라서, 
+스칼라 컬렉션의 문자열은 모든 시퀀스 연산을 지원한다. 배열도 마찬가지이다.
 
-**Example:** Here's one line of code that demonstrates many of the 
-advantages of Scala's collections.
+**예제:** 다음 코드는 스칼라 컬렉션의 장점을 보여준다.
 
     val (minors, adults) = people partition (_.age < 18)
 
-It's immediately clear what this operation does: It partitions a
-collection of `people` into `minors` and `adults` depending on
-their age. Because the `partition` method is defined in the root
-collection type `TraversableLike`, this code works for any kind of
-collection, including arrays. The resulting `minors` and `adults`
-collections will be of the same type as the `people` collection.
+이 코드가 하는 일은 직접적이며 분명하다. `people`의 컬렉션을 나이에 따라 `minors`과 `adults`로 구획한다. 
+`partition` 메소드는 루트 컬렉션 타입인 `TraversableLike`에 구현되어 있다. 따라서 배열을 포함한 모든 컬렉션에서 이 코드가 
+동작할 수 있다. 결과로 나오는 `minors`과 `adults`는 `people` 컬렉션과 같은 타입이 된다.
 
-This code is much more concise than the one to three loops required for
-traditional collection processing (three loops for an array, because
-the intermediate results need to be buffered somewhere else).  Once
-you have learned the basic collection vocabulary you will also find
-writing this code is much easier and safer than writing explicit
-loops. Furthermore, the `partition` operation is quite fast, and will
-get even faster on parallel collections on multi-cores.  (Parallel
-collections have been released
-as part of Scala 2.9.)
+전통적인 컬렉션 처리를 사용하는 경우 루프를 최대 세 개 사용해야 한다는 점과 비교해 보면 이 코드는 매우 간결하다(배열을 
+사용하는 경우 중간 결과를 다른곳에 버퍼링하기 위해 루프가 세 개 필요하다). 일단 컬렉션의 기본 어휘를 배우고 나면, 
+직접 루프를 도는 것보다, 이렇게 코드를 작성하는 것이 더 쉽고 안전하다는 사실을 알게 될 것이다. 또한, `partition` 연산은 
+꽤 빠르며, 다중코어에서 병렬 컬렉션으로 수행한다면 훨씬 더 빨라진다(병렬 컬렉션은 스칼라 2.9에 포함되어 배포되었다).
 
-This document provides an in depth discussion of the APIs of the
-Scala collections classes from a user perspective.  They take you on
-a tour of all the fundamental classes and the methods they define.
+이 문서는 스칼라 컬렉션 클래스의 API를 사용자 관점에서 자세히 논의한다. 이제 모든 기반 클래스와 그 안에 정의된 메소드에 대해 
+여행을 떠나 보자.

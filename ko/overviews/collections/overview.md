@@ -1,13 +1,16 @@
 ---
 layout: overview-large
-title: Mutable and Immutable Collections
+title: 가변성 컬렉션과 불변성 컬렉션
 
 disqus: true
 
 partof: collections
 num: 2
-languages: [ja, ko]
+language: ko
 ---
+
+스칼라 컬렉션에서는 구조적으로 불변성(immutable)인 컬렉션과 가변성(mutable)인 컬렉션을 
+구분한다. 
 
 Scala collections systematically distinguish between mutable and
 immutable collections. A _mutable_ collection can be updated or
