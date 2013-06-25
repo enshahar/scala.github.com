@@ -1,6 +1,6 @@
 ---
 layout: overview-large
-title: Maps
+title: 맵(Map)
 
 disqus: true
 
@@ -9,42 +9,42 @@ num: 7
 language: ko
 ---
 
-A [Map](http://www.scala-lang.org/api/current/scala/collection/Map.html) is an [Iterable](http://www.scala-lang.org/api/current/scala/collection/Iterable.html) consisting of pairs of keys and values (also named _mappings_ or _associations_). Scala's [Predef](http://www.scala-lang.org/api/current/scala/Predef$.html) class offers an implicit conversion that lets you write `key -> value` as an alternate syntax for the pair `(key, value)`. For instance `Map("x" -> 24, "y" -> 25, "z" -> 26)` means exactly the same as `Map(("x", 24), ("y", 25), ("z", 26))`, but reads better.
+[Map(맵)](http://www.scala-lang.org/api/current/scala/collection/Map.html)은 키와 값의 쌍으로 구성된 [Iterable(반복가능)](http://www.scala-lang.org/api/current/scala/collection/Iterable.html)한 컬렉션이다(_맵핑_ 또는 _연관_ 이라고도 한다). 스칼라의 [Predef](http://www.scala-lang.org/api/current/scala/Predef$.html) 클래스에는 `key -> value`를 `(key, value)` 대신 쓸수 있도록 하는 묵시적 변환이 정의되어 있다. 예를 들어 `Map("x" -> 24, "y" -> 25, "z" -> 26)`와 `Map(("x", 24), ("y", 25), ("z", 26))`는 의미가 완전히 동일하다. 다만 전자가 더 보기 좋을 뿐이다.
 
-The fundamental operations on maps are similar to those on sets. They are summarized in the following table and fall into the following categories:
+맵에서 제공하는 기본 연산들은 집합과 비슷하다. 이를 분류하면 아래와 같다. 전체는 그 이후 표에 요약해 두었다.
 
-* **Lookup** operations `apply`, `get`, `getOrElse`, `contains`, and `isDefinedAt`. These turn maps into partial functions from keys to values. The fundamental lookup method for a map is: `def get(key): Option[Value]`. The operation "`m get key`" tests whether the map contains an association for the given `key`. If so, it returns the associated value in a `Some`. If no key is defined in the map, `get` returns `None`. Maps also define an `apply` method that returns the value associated with a given key directly, without wrapping it in an `Option`. If the key is not defined in the map, an exception is raised.
-* **Additions and updates** `+`, `++`, `updated`, which let you add new bindings to a map or change existing bindings.
-* **Removals** `-`, `--`, which remove bindings from a map.
-* **Subcollection producers** `keys`, `keySet`, `keysIterator`, `values`, `valuesIterator`, which return a map's keys and values separately in various forms.
-* **Transformations** `filterKeys` and `mapValues`, which produce a new map by filtering and transforming bindings of an existing map.
+* **찾기** 연산 `apply`, `get`, `getOrElse`, `contains`, `isDefinedAt` 들은 맵을 키를 받아 값을 반환하는 부분함수로 바꾼다. 맵에서 바탕이 되는 찾기 메소드는 `def get(key): Option[Value]`이다. 연산 "`m get key`"는 맵에 주어진 `key`와 대응하는 연관관계쌍이 들어 있는지를 본다. 만약 그런 쌍이 있다면 그 연관쌍을 `Some`으로 포장해서 내어 놓는다. 맵에 키가 정의되어 있지 않다면 `get`은 `None`을 반환한다. 맵에는 또한 키에 대해 값을 `Option`으로 감싸지 않고 바로 반환하는 `apply` 메소드도 정의되어 있다. 만약 키가 없다면 예외가 발생한다.
+* **추가와 변경** 연산 `+`, `++`, `updated`를 사용하면 새로운 연관관계를 맵에 추가하거나, 기존의 관계를 변경할 수 있다.
+* **제거** 연산 `-`, `--`는 맵에서 연관 관계를 제거하기 위해 사용한다.
+* **부분 컬렉션** 생성 메소드 `keys`, `keySet`, `keysIterator`, `values`, `valuesIterator`는 맵의 모든 키나 모든 값을 별도로 여러 형태로 반환한다.
+* **변환** 연산 `filterKeys`와 `mapValues`는 맵을 필터링해 새 맵을 만들거나 기존 맵의 연관관계를 변환할 때 사용한다.
 
-### Operations in Class Map ###
+### 맵 클래스의 연산 ###
 
-| WHAT IT IS  	  	    | WHAT IT DOES				     |
+| 사용법   	  	    | 하는일				     |
 | ------       	       	    | ------					     |
-|  **Lookups:**             |						     |
-|  `ms get k`  	            |The value associated with key `k` in map `ms` as an option, `None` if not found.|
-|  `ms(k)`  	            |(or, written out, `ms apply k`) The value associated with key `k` in map `ms`, or exception if not found.|
-|  `ms getOrElse (k, d)`    |The value associated with key `k` in map `ms`, or the default value `d` if not found.|
-|  `ms contains k`  	    |Tests whether `ms` contains a mapping for key `k`.|
-|  `ms isDefinedAt k`  	    |Same as `contains`.                             |    
-| **Additions and Updates:**|						     |
-|  `ms + (k -> v)`          |The map containing all mappings of `ms` as well as the mapping `k -> v` from key `k` to value `v`.|
-|  `ms + (k -> v, l -> w)`  |The map containing all mappings of `ms` as well as the given key/value pairs.|
-|  `ms ++ kvs`              |The map containing all mappings of `ms` as well as all key/value pairs of `kvs`.|
-|  `ms updated (k, v)`      |Same as `ms + (k -> v)`.|
-| **Removals:**             |						     |
-|  `ms - k`  	            |The map containing all mappings of `ms` except for any mapping of key `k`.|  
-|  `ms - (k, 1, m)`  	    |The map containing all mappings of `ms` except for any mapping with the given keys.|    
-|  `ms -- ks`  	            |The map containing all mappings of `ms` except for any mapping with a key in `ks`.|    
-|   **Subcollections:**     |						     |
+|  **찾기:**             |						     |
+|  `ms get k`  	            |맵 `ms`에 있는 키 `k`에 대응하는 값을 옵션으로 반환한다. 찾을 수 없다면 `None`이 반환된다.|
+|  `ms(k)`  	            |(`ms apply k`라고 명시적으로 쓸 수 있음) 맵 `ms`에서 키 `k`에 대응하는 값을 반환한다. 값이 없다면 예외를 던진다.|
+|  `ms getOrElse (k, d)`    |맵 `ms`에서 키 `k`에 대응하는 값을 반환한다. 값이 없다면 디폴트 값으로 지정된 `d`를 반환한다.|
+|  `ms contains k`  	    |맴 `ms`에 키 `k`에 대한 맵핑이 정의되어 있는지 여부를 반환한다.|
+|  `ms isDefinedAt k`  	    |`contains`와 같다.                             |
+| **추가와 변경:**|						     |
+|  `ms + (k -> v)`          |`ms`의 모든 연관관계와 더불어 맵핑 `k -> v`, 즉 키 `k`에서 `v`로 가는 연관관계가 추가된 맵을 반환한다.|
+|  `ms + (k -> v, l -> w)`  |`ms`의 모든 연관관계와 더불어 주어진 모든 키-값 연관관계가 추가된 맵을 반환한다.|
+|  `ms ++ kvs`              |`ms`의 모든 연관관계와 더불어 `kvs`에 있는 연관관계가 추가된 맵을 반환한다. (단, `kvs`는 튜플이 원소이거나 맵 타입이어야 정상적으로 동작한다.)|
+|  `ms updated (k, v)`      |`ms + (k -> v)`과 같다.|
+| **제거:**             |						     |
+|  `ms - k`  	            |`ms`의 모든 연관관계 중에서 키 `k`에 대한 연관관계만이 포함되지 않은 맵을 반환한다.|
+|  `ms - (k, 1, m)`  	    |`ms`의 모든 연관관계 중에서 주어진 여러 키들에 대한 연관관계들이 포함되지 않은 맵을 반환한다.|
+|  `ms -- ks`  	            |`ms`의 모든 연관관계 중에서 `ks`에 있는 키들에 대한 연관관계들이 포함되지 않은 맵을 반환한다.|
+| **부분 컬렉션 :**     |						     |
 |  `ms.keys`  	            |An iterable containing each key in `ms`.        |
 |  `ms.keySet`              |A set containing each key in `ms`.              |
 |  `ms.keyIterator`         |An iterator yielding each key in `ms`.          |
 |  `ms.values`      	    |An iterable containing each value associated with a key in `ms`.|
 |  `ms.valuesIterator`      |An iterator yielding each value associated with a key in `ms`.|
-|   **Transformation:**     |						     |
+| **변환:**     |						     |
 |  `ms filterKeys p`        |A map view containing only those mappings in `ms` where the key satisfies predicate `p`.|
 |  `ms mapValues f`         |A map view resulting from applying function `f` to each value associated with a key in `ms`.|
 
@@ -53,25 +53,25 @@ Mutable maps support in addition the operations summarized in the following tabl
 
 ### Operations in Class mutable.Map ###
 
-| WHAT IT IS  	  	    | WHAT IT DOES				     |
+| 사용법   	  	    | 하는일				     |
 | ------       	       	    | ------					     |
-|  **Additions and Updates:**|						     |
-|  `ms(k) = v`              |(Or, written out, `ms.update(x, v)`). Adds mapping from key `k` to value `v` to map ms as a side effect, overwriting any previous mapping of `k`.|
+|  **추가와 변경:**|						     |
+|  `ms(k) = v`              |(`ms.update(x, v)`라고 명시적으로 쓸 수도 있음). 키 `k`에서 값 `v`로 가는 맵핑을 맵 `ms`에 부작용을 사용해 추가한다. 이미 키 `k`에 대한 값이 정의되어 있었다면 이를 덮어쓴다.|
 |  `ms += (k -> v)`         |Adds mapping from key `k` to value `v` to map `ms` as a side effect and returns `ms` itself.|
 |  `ms += (k -> v, l -> w)` |Adds the given mappings to `ms` as a side effect and returns `ms` itself.|
 |  `ms ++= kvs`             |Adds all mappings in `kvs` to `ms` as a side effect and returns `ms` itself.|
 |  `ms put (k, v)`          |Adds mapping from key `k` to value `v` to `ms` and returns any value previously associated with `k` as an option.|
 |  `ms getOrElseUpdate (k, d)`|If key `k` is defined in map `ms`, return its associated value. Otherwise, update `ms` with the mapping `k -> d` and return `d`.|
-|  **Additions and Updates:**|						     |
+|  **제거:**|						     |
 |  `ms -= k`                |Removes mapping with key `k` from ms as a side effect and returns `ms` itself.|
 |  `ms -= (k, l, m)`        |Removes mappings with the given keys from `ms` as a side effect and returns `ms` itself.|
 |  `ms --= ks`              |Removes all keys in `ks` from `ms` as a side effect and returns `ms` itself.|
 |  `ms remove k`            |Removes any mapping with key `k` from `ms` and returns any value previously associated with `k` as an option.|
 |  `ms retain p`            |Keeps only those mappings in `ms` that have a key satisfying predicate `p`.|
 |  `ms.clear()`             |Removes all mappings from `ms`.                 |
-|  **Transformation:**      |						     |
+|  **변환:**      |						     |
 |  `ms transform f`         |Transforms all associated values in map `ms` with function `f`.|
-|  **Cloning:**             |						     |
+|  **복사:**             |						     |
 |  `ms.clone`               |Returns a new mutable map with the same mappings as `ms`.|
 
 The addition and removal operations for maps mirror those for sets. As is the for sets, mutable maps also support the non-destructive addition operations `+`, `-`, and `updated`, but they are used less frequently because they involve a copying of the mutable map. Instead, a mutable map `m` is usually updated "in place", using the two variants `m(key) = value` or `m += (key -> value)`. There are is also the variant `m put (key, value)`, which returns an `Option` value that contains the value previously associated with `key`, or `None` if the `key` did not exist in the map before.
