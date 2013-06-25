@@ -1,6 +1,6 @@
 ---
 layout: overview-large
-title: Traversable() 트레잇
+title: 순회가능(Traversable) 트레잇
 
 disqus: true
 
@@ -44,7 +44,7 @@ f가 내놓는 결과값은 `foreach`가 무시한다.
 
 ### Traversable에 정의되어 있는 연산들 ###
 
-| 쓰는법 	  	    | 하는일				     |
+| 사용법 	  	    | 하는일				     |
 | ------       	       	    | ------					     |
 |  **추상 메소드:**     |						     |
 |  `xs foreach f`	    |함수 `f`를 `xs`의 모든 원소에 적용한다.|
@@ -88,7 +88,7 @@ f가 내놓는 결과값은 `foreach`가 무시한다.
 |  `xs filter p`	    |`xs`의 원소 중 술어 `p`를 만족하는 원소로 이루어진 컬렉션이다.|
 |  `xs withFilter p`	    |컬렉션에 필요시 계산하는 필터를 추가한다. 이 결과 컬렉션에 `map`, `flatMap`, `foreach`, `withFilter` 등이 호출되면 `xs` 중에 술어 `p`를 만족하는 원소에 대해서만 처리가 이루어진다.|
 |  `xs filterNot p`	    |`xs`의 원소 중 술어 `p`를 만족하지 않는 원소로 이루어진 컬렉션이다.|
-|  **분할:**        |
+|  **분할:**        |						     |
 |  `xs splitAt n`	    |`n`위치를 기준으로 `xs`를 둘로 분할한다. `(xs take n, xs drop n)` 쌍과 동일한 컬렉션 쌍을 반환한다.|
 |  `xs span p`	    	    |`xs`를 술어 `p`를 가지고 둘로 분할하되, `(xs takeWhile p, xs.dropWhile p)`과 같은 컬렉션 쌍을 반환한다.|
 |  `xs partition p`	    |`xs`를 술어 `p`를 만족하는 원소들과 만족하지 않는 원소의 두 컬렉션으로 분할한 튜플을 반환한다. `(xs filter p, xs.filterNot p)`과 같은 결과를 반환한다.|
