@@ -1,6 +1,6 @@
 ---
 layout: overview-large
-title: Sets
+title: 집합(Set)
 
 disqus: true
 
@@ -9,11 +9,11 @@ num: 6
 language: ko
 ---
 
-`Set`s are `Iterable`s that contain no duplicate elements. The operations on sets are summarized in the following table for general sets and in the table after that for mutable sets. They fall into the following categories:
+`Set(집합)`은 `Iterable(반복가능)` 중에서 중복 원소가 없는 것이다. 일반적인 집합의 연산은 다음 표에 정리되어 있고, 변경 가능한 집합의 연산은 그 다음에 오는 표에 정리되어 있다. 연산들은 다음과 같은 범주에 들어간다.
 
-* **Tests** `contains`, `apply`, `subsetOf`. The `contains` method asks whether a set contains a given element. The `apply` method for a set is the same as `contains`, so `set(elem)` is the same as `set contains elem`. That means sets can also be used as test functions that return true for the elements they contain. 
+* **검사** 연산으로 `contains`, `apply`, `subsetOf`가 있다. `contains` 메소드는 집합에 원소가 속해 있는지를 검사한다. 집합에 있어 `apply` 메소드는 `contains`과 동일하다. 따라서 `set(elem)`과 `set contains elem`는 같다. 따라서 집합을 원소가 포함되어있는지를 검사하는 검사 함수로 사용 가능하다. 
 
-For example
+예를 들면 다음과 같다.
 
 
     val fruit = Set("apple", "orange", "peach", "banana")
@@ -25,56 +25,56 @@ For example
     res1: Boolean = false
 
 
-* **Additions** `+` and `++`, which add one or more elements to a set, yielding a new set.
-* **Removals** `-`, `--`, which remove one or more elements from a set, yielding a new set.
-* **Set operations** for union, intersection, and set difference. Each of these operations exists in two forms: alphabetic and symbolic. The alphabetic versions are `intersect`, `union`, and `diff`, whereas the symbolic versions are `&`, `|`, and `&~`. In fact, the `++` that Set inherits from `Traversable` can be seen as yet another alias of `union` or `|`, except that `++` takes a `Traversable` argument whereas `union` and `|` take sets.
+* **추가** 연산에는 `+` and `++`가 있다. 이들은 집합에 하나 이상의 원소를 추가한 새 집합을 만들어 낸다.
+* **제거** 연산인 `-`, `--`는 집합에서 하나 이상의 원소를 제거한 새 집합을 만들어 낸다.
+* **집합 연산**으로 합집합, 교집합, 차집합이 있다. 각 연산은 두가지 버전이 존재한다. 하나는 영어문자를 사용한 것이고, 다른 하나는 기호로 된 이름을 사용한 것이다. 영문자 버전은 `intersect`, `union`, `diff`이며, 각각 순서대로 `&`, `|`, `&~`이란 기호 이름과 대응된다. 사실은 `Traversable`에서 상속받은 `++`도 `union` 또는 `|`에 대한 별칭이라 생각할수 있다. 다만 차이가 나는 것은 `++`는 `Traversable`을 매개변수로 받을 수 있지만, `union`과 `|`에는 집합만을 허용한다는 점이다.
 
-### Operations in Class Set ###
+### 집합(Set)의 연산 ###
 
-| WHAT IT IS  	  	    | WHAT IT DOES				     |
+| 사용법   	  	    | 하는일				     |
 | ------       	       	    | ------					     |
-|  **Tests:**               |						     |
-|  `xs contains x`  	    |Tests whether `x` is an element of `xs`.        |
-|  `xs(x)`        	    |Same as `xs contains x`.                        |
-|  `xs subsetOf ys`  	    |Tests whether `xs` is a subset of `ys`.         |
-|  **Additions:**           |						     |
-|  `xs + x`                 |The set containing all elements of `xs` as well as `x`.|
-|  `xs + (x, y, z)`         |The set containing all elements of `xs` as well as the given additional elements.|
-|  `xs ++ ys`  	            |The set containing all elements of `xs` as well as all elements of `ys`.|
-|  **Tests:**               |						     |
-|  `xs - x`  	            |The set containing all elements of `xs` except `x`.|
-|  `xs - (x, y, z)`         |The set containing all elements of `xs` except the given elements.|
-|  `xs -- ys`  	            |The set containing all elements of `xs` except the elements of `ys`.|
-|  `xs.empty`  	            |An empty set of the same class as `xs`.         |
-|  **Binary Operations:**   |						     |
-|  `xs & ys`  	            |The set intersection of `xs` and `ys`.          |
-|  `xs intersect ys`        |Same as `xs & ys`.                              |
-|  <code>xs &#124; ys</code>  	            |The set union of `xs` and `ys`.                 |
-|  `xs union ys`  	    |Same as <code>xs &#124; ys</code>.                              |
-|  `xs &~ ys`  	            |The set difference of `xs` and `ys`.            |
-|  `xs diff ys`  	    |Same as `xs &~ ys`.                             |
+|  **검사:**               |						     |
+|  `xs contains x`  	    |`x`가 `xs`의 원소인지 여부를 반환한다.        |
+|  `xs(x)`        	    |`xs contains x`와 같다.                        |
+|  `xs subsetOf ys`  	    |`xs`가 `ys`의 부분집합인지 여부를 반환한다.         |
+|  **추가:**           |						     |
+|  `xs + x`                 |`xs`의 모든 원소와 `x`를 원소로 하는 새 집합을 반환한다.|
+|  `xs + (x, y, z)`         |`xs`의 모든 원소와 덧붙인 모든 값들을 원소로 하는 새 집합을 반환한다.|
+|  `xs ++ ys`  	            |`xs`의 모든 원소와 `ys`의 모든 원소를 원소로 하는 새 집합을 반환한다.|
+|  **제거:**               |						     |
+|  `xs - x`  	            |`xs`의 모든 원소 중 `x`를 제거한 나머지를 원소로 하는 새 집합을 반환한다.|
+|  `xs - (x, y, z)`         |`xs`의 모든 원소 중 열거한 원소들을 제외한 나머지를 원소로 하는 새 집합을 반환한다.|
+|  `xs -- ys`  	            |`xs`의 모든 원소 중 `ys`의 원소들을 제거한 나머지를 원소로 하는 새 집합을 반환한다.|
+|  `xs.empty`  	            |`xs`와 동일한 타입의 빈 집합을 반환한다.         |
+|  **이항 연산:**   |						     |
+|  `xs & ys`  	            |`xs`와 `ys`의 교집합 연산이다.          |
+|  `xs intersect ys`        |`xs & ys`와 같다.                              |
+|  <code>xs &#124; ys</code>  	            |`xs`와 `ys`의 합집합 연산이다.          |
+|  `xs union ys`  	    |<code>xs &#124; ys</code>와 같다..                              |
+|  `xs &~ ys`  	            |`xs`와 `ys`의 차집합 연산이다.          |
+|  `xs diff ys`  	    |`xs &~ ys`와 같다..                             |
 
-Mutable sets offer in addition methods to add, remove, or update elements, which are summarized in below.
+변경 가능한 집합은 원소를 추가, 삭제, 변경하는 연산을 추가로 제공한다. 아래 표에 정리되어 있다.
 
-### Operations in Class mutable.Set ###
+### 변경 가능 집합(mutable.Set)의 연산 ###
 
-| WHAT IT IS  	  	    | WHAT IT DOES				     |
+| 사용법               | 하는일                    |
 | ------       	       	    | ------					     |
-|  **Additions:**           |						     |
+|  **추가:**           |						     |
 |  `xs += x`  	            |Adds element `x` to set `xs` as a side effect and returns `xs` itself.|
 |  `xs += (x, y, z)`        |Adds the given elements to set `xs` as a side effect and returns `xs` itself.|
 |  `xs ++= ys`  	    |Adds all elements in `ys` to set `xs` as a side effect and returns `xs` itself.|
 |  `xs add x`  	            |Adds element `x` to `xs` and returns `true` if `x` was not previously contained in the set, `false` if it was.|
-|  **Removals:**            |						     |
+|  **제거:**            |						     |
 |  `xs -= x`  	            |Removes element `x` from set `xs` as a side effect and returns `xs` itself.|
 |  `xs -= (x, y, z)`  	    |Removes the given elements from set `xs` as a side effect and returns `xs` itself.|
 |  `xs --= ys`  	    |Removes all elements in `ys` from set `xs` as a side effect and returns `xs` itself.|
 |  `xs remove x`  	    |Removes element `x` from `xs` and returns `true` if `x` was previously contained in the set, `false` if it was not.|
 |  `xs retain p`  	    |Keeps only those elements in `xs` that satisfy predicate `p`.|
 |  `xs.clear()`  	    |Removes all elements from `xs`.|
-|  **Update:**              |						     |
+|  **변경:**              |						     |
 |  `xs(x) = b`  	    |(or, written out, `xs.update(x, b)`). If boolean argument `b` is `true`, adds `x` to `xs`, otherwise removes `x` from `xs`.|
-|  **Cloning:**             |						     |
+|  **복제:**             |						     |
 |  `xs.clone`  	            |A new mutable set with the same elements as `xs`.|
 
 Just like an immutable set, a mutable set offers the `+` and `++` operations for element additions and the `-` and `--` operations for element removals. But these are less often used for mutable sets since they involve copying the set. As a more efficient alternative, mutable sets offer the update methods `+=` and `-=`. The operation `s += elem` adds `elem` to the set `s` as a side effect, and returns the mutated set as a result. Likewise, `s -= elem` removes `elem` from the set, and returns the mutated set as a result. Besides `+=` and `-=` there are also the bulk operations `++=` and `--=` which add or remove all elements of a traversable or an iterator.
