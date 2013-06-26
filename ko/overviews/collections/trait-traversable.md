@@ -17,7 +17,7 @@ language: ko
 `Traversable`을 구현하는 컬렉션 클래스는 단지 이 메소드만 정의하면 된다. 
 다른 메소드는 자동으로 `Traversable`에서 상속된다.
 
-`foreach` 메소드는 컬렉션의 모든 원소를 방문하면서 주어진 연산 f를 각 원소에 
+`foreach` 메소드는 컬렉션의 모든 원소를 차례로 방문하면서 주어진 연산 f를 각 원소에 
 적용한다. 이 연산 f의 타입은 `Elem => U`로 `Elem`은 컬렉션의 원소의 
 타입이며, `U`는 임의의 결과 타입이다. `f`는 부작용을 위해 호출된다. 따라서 
 f가 내놓는 결과값은 `foreach`가 무시한다.
@@ -25,9 +25,9 @@ f가 내놓는 결과값은 `foreach`가 무시한다.
 `Traversable`에는 여러 구체적 메소드가 정의되어 있다. 이들은 아래 표에 나열되어 있다. 
 각 메소드들은 다음과 같은 분류에 속한다.
 
-* **병합** 연산 `++`는 두 방문가능한 객체를 함께 이어붙이거나, 한 반복자의 모든 원소를 다른 방문가능 객체에 추가한다.
+* **병합** 연산 `++`는 두 방문가능한 객체를 함께 이어붙이거나, 어떤 방문가능 객체에 다른 반복자의 모든 원소를 추가한다.
 * **맵** 연산인 `map`, `flatMap`, `collect`는 인자로 넘겨진 함수를 컬렉션 원소에 적용한 결과로 이루어진 새 컬렉션을 만들어낸다.
-* **변환** 연산인 `toArray`, `toList`, `toIterable`, `toSeq`, `toIndexedSeq`, `toStream`, `toSet`, `toMap` 등은 `Traversable` 
+* **변환** 연산인 `toArray`, `toList`, `toIterable`, `toSeq`, `toIndexedSeq`, `toStream`, `toSet`, `toMap`은 `Traversable` 
 컬렉션을 더 구체적인 데이터 구조로 변환한다. 런타임에 수신자가 이미 변환 결과 컬렉션 타입이었다면, 각 변환 메소드는 수신자를 그대로 반환한다. 예를 들어 리스트에 `toList`를 적용하면 그 리스트 자신이 반환된다.
 * **복사** 연산으로 `copyToBuffer`와 `copyToArray`가 있다. 이름이 말하는데로 각각 컬렉션 원소를 버퍼나 배열에 복사한다.
 * **크기 정보** 연산 `isEmpty`, `nonEmpty`, `size`, `hasDefiniteSize`: 순회가능한 컬렉션은 유한할 수도 있고, 무한할 수도 있다. 
@@ -42,7 +42,7 @@ f가 내놓는 결과값은 `foreach`가 무시한다.
 * **문자열** 연산 `mkString`, `addString`, `stringPrefix`는 컬렉션을 문자열로 바꾸는 여러가지 방법을 제공한다.
 * **뷰** 연산은 `view` 메소드를 오버로딩한 두 메소드이다. 뷰는 지연 계산될 수 있는 컬렉션이다. 뷰에 대해서는 [나중에](#Views) 	다룰 것이다.
 
-### Traversable에 정의되어 있는 연산들 ###
+### Traversable 클래스의 연산 ###
 
 | 사용법 	  	    | 하는일				     |
 | ------       	       	    | ------					     |
@@ -58,8 +58,8 @@ f가 내놓는 결과값은 `foreach`가 무시한다.
 |  `xs.toArray`	    	    |컬렉션을 배열(Array)로 변환한다.|
 |  `xs.toList`	    	    |컬렉션을 리스트(List)로 변환한다.|
 |  `xs.toIterable`    	    |컬렉션을 반복가능객체(Iterable)로 변환한다.|
-|  `xs.toSeq`	    	    |컬렉션을 순서열(Seq)로 변환한다.|
-|  `xs.toIndexedSeq`   	    |컬렉션을 첨자가 있는 순서열(IndexedSeq)로 변환한다.|
+|  `xs.toSeq`	    	    |컬렉션을 열(Seq)로 변환한다.|
+|  `xs.toIndexedSeq`   	    |컬렉션을 첨자가 있는 열(IndexedSeq)로 변환한다.|
 |  `xs.toStream`    	    |컬렉션을 스트림(Stream)으로 변환한다.|
 |  `xs.toSet`	    	    |컬렉션을 집합(Set)으로 변환한다.|
 |  `xs.toMap`	    	    |컬렉션을 키/값 쌍의 맵으로 변환한다. 컬렉션의 원소가 튜플이 아니라면 이 메소드 호출은 컴파일시 타입 오류가 난다.|
