@@ -74,21 +74,21 @@ language: ko
 |  **복사:**             |						     |
 |  `ms.clone`               |`ms`과 같은 맵핑들을 포함하는 새로운 변경가능한 맵을 반환한다.|
 
-The addition and removal operations for maps mirror those for sets. As is the for sets, mutable maps also support the non-destructive addition operations `+`, `-`, and `updated`, but they are used less frequently because they involve a copying of the mutable map. Instead, a mutable map `m` is usually updated "in place", using the two variants `m(key) = value` or `m += (key -> value)`. There are is also the variant `m put (key, value)`, which returns an `Option` value that contains the value previously associated with `key`, or `None` if the `key` did not exist in the map before.
+맵의 추가와 제거 연산은 집합의 그것과 비슷하다. 집합에서와 마찬가지로 변경 가능한 맵도 부작용을 사용하지 않는 추가 연산 `+`, `-`, `updated`를 지원한다. 하지만 이런 연산들은 변경 가능 맵을 복사하기 때문에 자주 사용되지는 않는다. 대신 변경 가능한 맵 `m`은 보통 "그 자리에서" `m(key) = value`이나 `m += (key -> value)` 연산을 사용해 변경된다. 업데이트 연산에는 이전에 `key`와 연관되어 있던 값을 `Option`으로 돌려주는 `m put (key, value)`도 있다. `put`은 만약 `key`가 맵에 존재하지 않았다면 `None`을 반환한다.
 
-The `getOrElseUpdate` is useful for accessing maps that act as caches. Say you have an expensive computation triggered by invoking a function `f`:
+`getOrElseUpdate`는 캐시처럼 동작하는 맵을 억세스할 때 유용하다. `f`를 호출하면 비용이 많이 드는 계산을 수행해야 하는 경우를 생각해 보자.
 
     scala> def f(x: String) = { 
            println("taking my time."); sleep(100)
            x.reverse }
     f: (x: String)String
 
-Assume further that `f` has no side-effects, so invoking it again with the same argument will always yield the same result. In that case you could save time by storing previously computed bindings of argument and results of `f` in a map and only computing the result of `f` if a result of an argument was not found there. One could say the map is a _cache_ for the computations of the function `f`.
+더 나아가 `f`에 부작용이 없다고 한다면, 동일한 인자로 이 함수를 호출할 때마다 항상 같은 결과를 받을 것이다. 이런 경우 예전에 계산했던 값을 인자와 `f`의 결과값을 연관시켜 맴에 저장해 두고, 새로운 인자 값이 들어와 맵에서 예전에 계산해 둔 결과를 찾을 수 없는 경우에만 `f`의 결과를 계산하게 한다면 비용이 줄어든다. 이 경우 맵을 함수 `f`의 계산 결과에 대한 _캐시(cache)_ 라 부를 수도 있다.
 
     val cache = collection.mutable.Map[String, String]()
     cache: scala.collection.mutable.Map[String,String] = Map()
 
-You can now create a more efficient caching version of the `f` function:
+이제 더 효율이 좋은 `f` 함수의 캐시된 버전을 만들 수 있다.
 
     scala> def cachedF(s: String) = cache.getOrElseUpdate(s, f(s))
     cachedF: (s: String)String
@@ -98,7 +98,7 @@ You can now create a more efficient caching version of the `f` function:
     scala> cachedF("abc")
     res4: String = cba
 
-Note that the second argument to `getOrElseUpdate` is "by-name", so the computation of `f("abc")` above is only performed if `getOrElseUpdate` requires the value of its second argument, which is precisely if its first argument is not found in the `cache` map. You could also have implemented `cachedF` directly, using just basic map operations, but it would take more code to do so:
+`getOrElseUpdate`의 두번째 인자는 "이름에 의한 호출(by-name)"이므로, 위의 `f("abc")` 계산은 오직 `getOrElseUpdate`가 두번째 인자 값을 필요로 하는 경우에만 수행된다. 이는 정확하게 말하자면 첫 번째 인자를 `cache` 맵에서 못 찾은 경우이다. 맵의 기본 연산을 활용해 `cachedF`를 직접 구현할 수도 있었겠지만, 그렇게 하려면 조금 길게 코드를 작성해야 한다.
 
     def cachedF(arg: String) = cache get arg match {
       case Some(result) => result
