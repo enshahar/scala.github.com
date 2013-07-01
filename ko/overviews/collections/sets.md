@@ -148,3 +148,4 @@ res3: scala.collection.immutable.TreeSet[String] = TreeSet(four, one, three, two
 
 따라서 크기가 작은 정수 원소를 여러개 포함하는 경우 비트집합을 사용하면 다른 집합에 비해 작은 크기로 가능하다. 비트 집합의 또 다른 잇점은 `contains`를 사용한 포함관계 검사나 `+=`, `-=` 등을 사용한 원소 추가/제거가 모두 아주 효율적이라는 점이다.
 
+번역: 오현석(enshahar@gmail.com)
