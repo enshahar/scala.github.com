@@ -1,6 +1,6 @@
 ---
 layout: overview-large
-title: Concrete Mutable Collection Classes
+title: 변경 가능한 컬렉션에 속하는 구체적인 클래스들
 
 disqus: true
 
@@ -9,11 +9,11 @@ num: 9
 language: ko
 ---
 
-You've now seen the most commonly used immutable collection classes that Scala provides in its standard library. Take a look now at the mutable collection classes.
+스칼라 표준 라이브러리가 제공하는 가장 일반적으로 사용되는 변경 불가능한 컬렉션 클래스에 대해 살펴보았다. 이제 변경가능한 컬렉션 클래스를 살펴보자.
 
-## Array Buffers
+## 배열 버퍼
 
-An [ArrayBuffer](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/ArrayBuffer.html) buffer holds an array and a size. Most operations on an array buffer have the same speed as for an array, because the operations simply access and modify the underlying array. Additionally, array buffers can have data efficiently added to the end. Appending an item to an array buffer takes amortized constant time. Thus, array buffers are useful for efficiently building up a large collection whenever the new items are always added to the end.
+[ArrayBuffer(배열버퍼)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/ArrayBuffer.html)는 배열과 크기를 저장한다. 배열 버퍼에 대한 대부분의 연산은 배열에 대한 연산과 같은 복잡도이다. 왜냐하면 이러한 연산들은 단지 하부의 배열을 억세스하거나 변경하기 때문이다. 추가로 배열 버퍼에서는 데이터를 효율적으로 맨 마지막에 추가할 수 있다. 배열 버퍼에 데이터를 추가하는 작업의 상환 시간 복잡도(amortized time complexity)도 상수 시간이다. 따라서 배열 버퍼는 새 데이터가 맨 마지막에만 추가되는 큰 컬렉션을 효율적으로 구축할 때 유용하다.
 
     scala> val buf = scala.collection.mutable.ArrayBuffer.empty[Int]
     buf: scala.collection.mutable.ArrayBuffer[Int] = ArrayBuffer()
@@ -24,9 +24,9 @@ An [ArrayBuffer](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/co
     scala> buf.toArray
     res34: Array[Int] = Array(1, 10)
 
-## List Buffers
+## 리스트 버퍼
 
-A [ListBuffer](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/ListBuffer.html) is like an array buffer except that it uses a linked list internally instead of an array. If you plan to convert the buffer to a list once it is built up, use a list buffer instead of an array buffer.
+[ListBuffer(리스트버퍼)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/ListBuffer.html)는 배열 대신 내부적으로 연결된 리스트를 사용한다는 점만 다르고 배열 버퍼와 비슷하다. 만약 컬렉션을 구축한 다음 리스트로 변환할 생각이라면, 배열 버퍼 대신 리스트 버퍼를 사용하도록 하라.
 
     scala> val buf = scala.collection.mutable.ListBuffer.empty[Int]
     buf: scala.collection.mutable.ListBuffer[Int] = ListBuffer()
@@ -37,9 +37,9 @@ A [ListBuffer](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/coll
     scala> buf.toList
     res37: List[Int] = List(1, 10)
 
-## StringBuilders
+## 스트링빌더
 
-Just like an array buffer is useful for building arrays, and a list buffer is useful for building lists, a [StringBuilder](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/StringBuilder.html) is useful for building strings. String builders are so commonly used that they are already imported into the default namespace. Create them with a simple `new StringBuilder`, like this:
+배열 버퍼가 배열을 만들 때 유용하고, 리스트 버퍼는 리스트를 만들 때 유용한 것과 같이, [StringBuilder(스트링빌더)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/StringBuilder.html)는 스트링을 만들 때 유용하다. 스트링빌더는 자주 사용되기 때문에 기본 네임스페이스에 임포트되어 있다. 단지 아래와 같이 `new StringBuilder`라고 하면 만들 수 있다.
 
     scala> val buf = new StringBuilder
     buf: StringBuilder = 
@@ -50,9 +50,9 @@ Just like an array buffer is useful for building arrays, and a list buffer is us
     scala> buf.toString
     res41: String = abcdef
 
-## Linked Lists
+## 연결된 리스트
 
-Linked lists are mutable sequences that consist of nodes which are linked with next pointers. They are supported by class [LinkedList](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/LinkedList.html). In most languages `null` would be picked as the empty linked list. That does not work for Scala collections, because even empty sequences must support all sequence methods. In particular `LinkedList.empty.isEmpty` should return `true` and not throw a `NullPointerException`. Empty linked lists are encoded instead in a special way: Their `next` field points back to the node itself. Like their immutable cousins, linked lists are best traversed sequentially. In addition linked lists make it easy to insert an element or linked list into another linked list.
+연결된 리스트는 변경 가능한 열로 각 노드는 다음번 노드를 가리키는 포인터로 서로 연결되어 있다. 이들은 [LinkedList(연결리스트)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/collection/mutable/LinkedList.html) 클래스로 지원된다. 대부분의 언어에서 `null`이 빈 연결 리스트로 사용된다. 스칼라 컬렉션에서는 그렇게 할 수 없는데 왜냐하면 빈 열도 열이 제공하는 모든 메소드를 지원해야 하기 때문이다. 특히 `LinkedList.empty.isEmpty`가 `true`를 반환해야지 `NullPointerException`을 발생시키면 안된다. 따라서 빈 연결 리스트는 특별한 방식으로 처리된다. 빈 연결리스트의 `next` 필드는 자기 자신을 가리킨다. 변경 불가능한 리스트와 마찬가지로 연결리스트도 순차적으로 순회할 때 가장 성능이 좋다. 추가로 연결리스트를 사용하면 원소나 연결 리스트를 다른 연결 리스트에 추가하는 것이 쉽다.
 
 ## Double Linked Lists
 
