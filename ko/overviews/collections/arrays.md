@@ -6,10 +6,10 @@ disqus: true
 
 partof: collections
 num: 10
-language: ko
+languages: [ko]
 ---
 
-[Array](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/Array.html) is a special kind of collection in Scala. On the one hand, Scala arrays correspond one-to-one to Java arrays. That is, a Scala array `Array[Int]` is represented as a Java `int[]`, an `Array[Double]` is represented as a Java `double[]` and a `Array[String]` is represented as a `Java String[]`. But at the same time, Scala arrays offer much more than their Java analogues. First, Scala arrays can be _generic_. That is, you can have an `Array[T]`, where `T` is a type parameter or abstract type. Second, Scala arrays are compatible with Scala sequences - you can pass an `Array[T]` where a `Seq[T]` is required. Finally, Scala arrays also support all sequence operations. Here's an example of this in action:
+[배열(Array)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/Array.html)은 스칼라에 있는 특별한 종류의 컬렉션이다. 한편, 스칼라 배열은 자바의 배열과 일대일 대응한다. 즉, 스칼라 배열 `Array[Int]`는 자바의 `int[]`로 표현되며, `Array[Double]`은 자바의 `double[]`로, `Array[String]`은 `Java String[]`로 표현될 수 있다. 그러나 이와 동시에, 스칼라 배열은 자바 배열 유사체보다 훨씬 많은 것을 제공한다. 첫 번째로, 스칼라 배열은 **제너릭(Generic)** 할 수 있다. 이는 `Array[T]`를 사용할 수 있다는 의미이며, `T`는 타입 매개 변수나 추상 타입을 의미한다. 두 번째로, 스칼라 배열은 스칼라 시퀀스와 호환된다. `Seq[T]`가 필요할 때, `Array[T]`를 전달할 수 있다는 것을 의미한다. 마지막으로, 스칼라 배열은 모든 시퀀스 연산을 지원한다. 직접 예시를 통해서 알아보자:
 
     scala> val a1 = Array(1, 2, 3)
     a1: Array[Int] = Array(1, 2, 3)
@@ -20,9 +20,9 @@ language: ko
     scala> a3.reverse
     res1: Array[Int] = Array(9, 3)
 
-Given that Scala arrays are represented just like Java arrays, how can these additional features be supported in Scala? In fact, the answer to this question differs between Scala 2.8 and earlier versions. Previously, the Scala compiler somewhat "magically" wrapped and unwrapped arrays to and from `Seq` objects when required in a process called boxing and unboxing. The details of this were quite complicated, in particular when one created a new array of generic type `Array[T]`. There were some puzzling corner cases and the performance of array operations was not all that predictable.
+주어진 스칼라 배열은 자바의 배열과 똑같이 표현된다. 스칼라는 이러한 추가적인 기능을 어떻게 지원할까? 사실, 위의 질문의 답은 스칼라 2.8 버전과 그 이전 버전에 따라 다르다. 예전에는, 스칼라 컴파일러가 "마법같이" 박싱(boxing)과 언박싱(unboxing) 과정에서, 필요할 때 배열을 `Seq` 객체로 변환하고 되돌렸다. 자세한 내용은 꽤 복잡하며, 특히 제너릭 타입 `Array[T]`에서 새로운 배열을 생성할 때는 더욱 어렵다. 헷갈리는 복합 경계 조건(corner case)들이 있고, 배열 연산의 성능을 예측하기 어려웠다.
 
-The Scala 2.8 design is much simpler. Almost all compiler magic is gone. Instead the Scala 2.8 array implementation makes systematic use of implicit conversions. In Scala 2.8 an array does not pretend to _be_ a sequence. It can't really be that because the data type representation of a native array is not a subtype of `Seq`. Instead there is an implicit "wrapping" conversion between arrays and instances of class `scala.collection.mutable.WrappedArray`, which is a subclass of `Seq`. Here you see it in action:
+스칼라 2.8의 설계는 훨씬 간단하다. 컴파일러가 하는 모든 마법은 거의 사라졌다. 대신에 스칼라 2.8의 배열 구현은 암시적 변환의 체계적인 사용을 가능케 한다. 스칼라 2.8에서는, 배열은 시퀀스**처럼** 행동하지 않는다. 실제로 기본 배열의 데이터 타입이 `Seq`의 자식 타입(subtype)이 아니기 때문에 그럴 수 없다. 대신에, 배열과 `Seq`의 자식 클래스인 `scala.collection.mutable.WrappedArray`의 인스턴스 사이에는 암시적으로 "감싸주는(wrapping)" 변환이 존재한다. 직접 알아보자:
 
     scala> val seq: Seq[Int] = a1
     seq: Seq[Int] = WrappedArray(1, 2, 3)
@@ -31,11 +31,11 @@ The Scala 2.8 design is much simpler. Almost all compiler magic is gone. Instead
     scala> a1 eq a4
     res2: Boolean = true
 
-The interaction above demonstrates that arrays are compatible with sequences, because there's an implicit conversion from arrays to `WrappedArray`s. To go the other way, from a `WrappedArray` to an `Array`, you can use the `toArray` method defined in `Traversable`. The last REPL line above shows that wrapping and then unwrapping with `toArray` gives the same array you started with.
+위의 상호작용은 배열에서 `WrappedArray`로의 암시적인 변환이 있기 때문에, 배열이 시퀀스와 호환되는 것을 보여준다.  `WrappedArray`에서 `배열`로 변환하기 위해서는, `Traversable`에 정의된 `toArray` 메소드를 사용할 수 있다. 마지막 REPL 줄에서 `toArray`를 통한 감싸고 풀어주는 변환이, 시작했던 배열과 동일한 것을 만들어주는 것을 볼 수 있다.
 
-There is yet another implicit conversion that gets applied to arrays. This conversion simply "adds" all sequence methods to arrays but does not turn the array itself into a sequence. "Adding" means that the array is wrapped in another object of type `ArrayOps` which supports all sequence methods. Typically, this `ArrayOps` object is short-lived; it will usually be inaccessible after the call to the sequence method and its storage can be recycled. Modern VMs often avoid creating this object entirely.
+배열에 적용되는 또 다른 암시적 변환이 존재한다. 이 변환은 모든 시퀀스 메소드를 배열에 "더하지만" 배열 자체를 시퀀스로 바꾸지 않는다. "더한다"는 것은 배열이 모든 시퀀스 메소드를 지원하는 `ArrayOps` 타입의 객체로 감싸진다는 것을 의미한다. 일반적으로, 이 `ArrayOps` 객체는 오래 가지 않는다; 보통 시퀀스 메소드가 불려진 후에는 접근할 수 없고, 메모리 공간은 재활용된다. 현대의 가상 머신은 종종 이러한 객체의 생성을 생략하기도 한다.
 
-The difference between the two implicit conversions on arrays is shown in the next REPL dialogue:
+이러한 배열에서의 두 가지 암시적 변환의 차이점은 다음 REPL 다이얼로그에서 확인할 수 있다:
 
     scala> val seq: Seq[Int] = a1
     seq: Seq[Int] = WrappedArray(1, 2, 3)
@@ -46,21 +46,21 @@ The difference between the two implicit conversions on arrays is shown in the ne
     scala> ops.reverse
     res3: Array[Int] = Array(3, 2, 1)
 
-You see that calling reverse on `seq`, which is a `WrappedArray`, will give again a `WrappedArray`. That's logical, because wrapped arrays are `Seqs`, and calling reverse on any `Seq` will give again a `Seq`. On the other hand, calling reverse on the ops value of class `ArrayOps` will give an `Array`, not a `Seq`.
+`WrappedArray`인 `seq`를 반전시키는 것이 다시 `WrappedArray`를 돌려줌을 볼 수 있다. 감싸진 배열은 `Seqs`이고, 어떤 `Seq`를 반전시키는 것은 다시 `Seq`를 얻게 될 것이기 때문에 논리적인 일이다. 한편, `ArrayOps` 클래스의 값 ops를 반전시키면 `Seq`가 아니라 `배열`을 돌려줄 것이다.
 
-The `ArrayOps` example above was quite artificial, intended only to show the difference to `WrappedArray`. Normally, you'd never define a value of class `ArrayOps`. You'd just call a `Seq` method on an array:
+위의 `ArrayOps` 예제는 `WrappedArray`와의 차이를 보여주기 위해 상당히 인위적이다. 일반적으로, `ArrayOps`에 값을 정의하는 일은 일어나지 않는다. 단순히 배열에서 `Seq` 메소드를 호출하면 된다:
 
     scala> a1.reverse
     res4: Array[Int] = Array(3, 2, 1)
 
-The `ArrayOps` object gets inserted automatically by the implicit conversion. So the line above is equivalent to
+`ArrayOps` 객체는 암시적 변환에 의해 자동으로 삽입된다. 따라서 윗줄은 아래와 동일하다.
 
     scala> intArrayOps(a1).reverse
     res5: Array[Int] = Array(3, 2, 1)
 
-where `intArrayOps` is the implicit conversion that was inserted previously. This raises the question how the compiler picked `intArrayOps` over the other implicit conversion to `WrappedArray` in the line above. After all, both conversions map an array to a type that supports a reverse method, which is what the input specified. The answer to that question is that the two implicit conversions are prioritized. The `ArrayOps` conversion has a higher priority than the `WrappedArray` conversion. The first is defined in the `Predef` object whereas the second is defined in a class `scala.LowPritoryImplicits`, which is inherited from `Predef`. Implicits in subclasses and subobjects take precedence over implicits in base classes. So if both conversions are applicable, the one in `Predef` is chosen. A very similar scheme works for strings.
+`intArrayOps`가 앞서 삽입되었던 암시적 변환이다. 이것은 어떻게 컴파일러가 `WrappedArray`로 변환해주는 위에 있는 다른 암시적 변환을 제치고, `intArrayOps`를 선택하는지에 대한 문제를 던져준다. 결국 두 변환 모두 입력이 정해진 reverse 메소드를 지원하는 타입으로 배열을 변환하는 것이다. 질문에 대한 답은 두 암시적 변환에 우선 순위가 있다는 것이다. `ArrayOps` 변환은 `WrappedArray` 변환에 우선한다. `ArrayOps`는 `Predef` 객체에 선언되어있는 반면에,  `WrappedArray`는 `Predef`에서 상속받은 `scala.LowPriorityImplicits` 클래스에 선언되어있다. 자식 클래스와 자식 객체(subobject)의 암시적 변환은 부모 클래스의 암시적 변환에 우선한다. 따라서, 두 가지 변환이 모두 가능할 경우에는, `Predef`에 있는 것이 선택된다. 문자열에도 유사한 방법이 사용된다.
 
-So now you know how arrays can be compatible with sequences and how they can support all sequence operations. What about genericity? In Java you cannot write a `T[]` where `T` is a type parameter. How then is Scala's `Array[T]` represented? In fact a generic array like `Array[T]` could be at run-time any of Java's eight primitive array types `byte[]`, `short[]`, `char[]`, `int[]`, `long[]`, `float[]`, `double[]`, `boolean[]`, or it could be an array of objects. The only common run-time type encompassing all of these types is `AnyRef` (or, equivalently `java.lang.Object`), so that's the type to which the Scala compiler maps `Array[T]`. At run-time, when an element of an array of type `Array[T]` is accessed or updated there is a sequence of type tests that determine the actual array type, followed by the correct array operation on the Java array. These type tests slow down array operations somewhat. You can expect accesses to generic arrays to be three to four times slower than accesses to primitive or object arrays. This means that if you need maximal performance, you should prefer concrete over generic arrays. Representing the generic array type is not enough, however, There must also be a way to create generic arrays. This is an even harder problem, which requires a little bit of help from you. To illustrate the problem, consider the following attempt to write a generic method that creates an array.
+이제 어떻게 배열이 시퀀스와 호환되며, 어떻게 모든 시퀀스 연산이 지원되는지 알게 되었을 것이다. 제너릭은 어떻게 이루어질까? 자바에서는 타입 매개변수 `T`에 대해 `T[]`를 사용할 수 없다. 그러면 어떻게 스칼라의 `Array[T]`가 구현될까?  사실 `Array[T]` 같은 제너릭 배열은 런타임시에 `byte[]`, `short[]`, `char[]`, `int[]`, `long[]`, `float[]`, `double[]`, `boolean[]` 같은 자바의 8개 원시 타입 중 하나이거나, 객체의 배열일 수 있다. 이러한 모든 타입들의 런타임시 형태는 `AnyRef` (혹은, 해당하는 `java.lang.Object`)이기 때문에, 스칼라 컴파일러는 `Array[T]`를 `AnyRef`로 맵핑한다. 런타임시에 `Array[T]` 타입의 원소가 접근되거나 갱신되면 실제 배열 타입을 검사하고, 자바 배열에 대해 올바른 배열 연산을 수행한다. 이러한 타입 검사는 배열 연산을 조금 느리게 만든다. 제너릭 타입 배열에 접근하는 것은 원시 배열이나 객체(object) 배열에 접근하는 것보다 3 ~ 4배 정도 느리다고 예상할 수 있다. 만약 최대 성능을 원한다면, 제너릭 배열보다는 구체적인 타입 배열을 쓰는 것이 좋다. 제너릭 배열을 구현하는 것만으로는 충분치 않으며, 생성하는 방법 또한 필요하다. 이것은 더욱 어려운 문제이고, 당신의 도움이 조금 필요하다. 문제를 설명하기 위해, 아래의 배열을 생성하기 위한 제너릭 메소드를 기술하는 접근을 살펴보자.
 
     // this is wrong!
     def evenElems[T](xs: Vector[T]): Array[T] = {
@@ -70,18 +70,19 @@ So now you know how arrays can be compatible with sequences and how they can sup
       arr
     }
 
-The `evenElems` method returns a new array that consist of all elements of the argument vector `xs` which are at even positions in the vector. The first line of the body of `evenElems` creates the result array, which has the same element type as the argument. So depending on the actual type parameter for `T`, this could be an `Array[Int]`, or an `Array[Boolean]`, or an array of some of the other primitive types in Java, or an array of some reference type. But these types have all different runtime representations, so how is the Scala runtime going to pick the correct one? In fact, it can't do that based on the information it is given, because the actual type that corresponds to the type parameter `T` is erased at runtime. That's why you will get the following error message if you compile the code above:
+`evenElems` 메소드는 인수로 넘어온 벡터 `xs`의 짝수 위치에 있는 모든 원소를 포함한 새로운 배열을 반환한다. `evenElems` 본문의 첫째 줄은 인수와 동일한 타입을 가지는 배열을 생성한다. 그러므로 실제 타입 매개 변수 `T`에 따라 `Array[Int]`, `Array[Boolean]`, 혹은 자바의 다른 원시 타입 배열이나 참조 타입의 배열일 수 있다. 하지만 이 타입들은 런타임시에 모두 다르게 구현이 되는데, 스칼라는 어떻게 런타임에서 올바른 타입을 찾아낼 수 있을까? 사실, 이것은 주어진 정보로는 해결할 수 없다. 이는 타입 매개 변수 `T`에 대응하는 실제 타입이 런타임시에 지워지기 때문이다. 이것이 위의 코드를 컴파일 하려고 하면 아래와 같은 에러 메시지가 출력되는 이유이다.
 
     error: cannot find class manifest for element type T
       val arr = new Array[T]((arr.length + 1) / 2)
             ^
-What's required here is that you help the compiler out by providing some runtime hint what the actual type parameter of `evenElems` is. This runtime hint takes the form of a class manifest of type `scala.reflect.ClassManifest`. A class manifest is a type descriptor object which describes what the top-level class of a type is. Alternatively to class manifests there are also full manifests of type `scala.reflect.Manifest`, which describe all aspects of a type. But for array creation, only class manifests are needed.
 
-The Scala compiler will construct class manifests automatically if you instruct it to do so. "Instructing" means that you demand a class manifest as an implicit parameter, like this:
+여기에 필요한 것은, 실제 `evenElems`의 타입이 무엇인지에 대한 런타임 힌트를 컴파일러에게 제공해서 도와주는 것이다. 이 런타임 힌트는 `scala.reflect.ClassManifest` 클래스 매니페스트의 형태를 가진다. 클래스 매니페스트란 타입의 최상위 클래스가 무엇인지를 설명하는 타입 설명 객체이다. 클래스 매니페스트대신에, 타입의 모든 것을 설명하는 `scala.reflect.Manifest`라는 전체 매니페스트도 있다. 그러나 배열 생성시에는, 클래스 매니페스트만이 필요하다.
+
+스칼라 컴파일러에게 클래스 매니페스트를 만들도록 지시를 내린다면 알아서 클래스 매니페스트를 생성한다. "지시한다"는 의미는 클래스 매니페스트를 아래와 같이 암시적 매개 변수로 요청한다는 뜻이다:
 
     def evenElems[T](xs: Vector[T])(implicit m: ClassManifest[T]): Array[T] = ...
 
-Using an alternative and shorter syntax, you can also demand that the type comes with a class manifest by using a context bound. This means following the type with a colon and the class name `ClassManifest`, like this:
+문맥 범위(context bound)를 이용하면 더 짧게 클래스 매니페스트를 요청할 수 있다. 이것은 타입 뒤에 쌍점(:)과 함께 따라오는 클래스의 이름 `ClassManifest`를 기술하는 것을 의미한다.:
 
     // this works
     def evenElems[T: ClassManifest](xs: Vector[T]): Array[T] = {
@@ -91,28 +92,27 @@ Using an alternative and shorter syntax, you can also demand that the type comes
       arr
     }
 
-The two revised versions of `evenElems` mean exactly the same. What happens in either case is that when the `Array[T]` is constructed, the compiler will look for a class manifest for the type parameter T, that is, it will look for an implicit value of type `ClassManifest[T]`. If such a value is found, the manifest is used to construct the right kind of array. Otherwise, you'll see an error message like the one above.
+변경된 두 가지 버전의 `evenElems`는 정확히 동일하다. 두 경우 모두, `Array[T]`가 생성될 때, 컴파일러는 타입 매개변수 T에 대해서 클래스 매니페스트를 검색하고, `ClassManifest[T]`의 암시적 값을 찾는다. 해당 값이 발견되면, 매니페스트는 올바른 종류의 배열을 생성한다. 그러지 않으면, 위와 같은 에러 메시지를 보게 될 것이다.
 
-Here is some REPL interaction that uses the `evenElems` method.
+아래의 `evenElems` 메소드를 사용하는 REPL 상호작용을 살펴보자.
 
     scala> evenElems(Vector(1, 2, 3, 4, 5))
     res6: Array[Int] = Array(1, 3, 5)
     scala> evenElems(Vector("this", "is", "a", "test", "run"))
     res7: Array[java.lang.String] = Array(this, a, run)
 
-In both cases, the Scala compiler automatically constructed a class manifest for the element type (first, `Int`, then `String`) and passed it to the implicit parameter of the `evenElems` method. The compiler can do that for all concrete types, but not if the argument is itself another type parameter without its class manifest. For instance, the following fails:
+양 쪽 모두, 스칼라 컴파일러가 자동으로 원소의 타입(`Int`와 `String`)에 대한 클래스 매니페스트를 생성하였고, `evenElems` 메소드의 암시적 매개 변수로 전달하였다. 컴파일러는 모든 구체적인 타입에 대해서 매니페스트를 생성해주지만, 인수 자체가 클래스 매니페스트 없는 타입 매개 변수일 경우에는 불가능하다. 예를 들어, 아래의 실패 사례를 살펴보자:
 
     scala> def wrap[U](xs: Array[U]) = evenElems(xs)
-    <console>:6: error: could not find implicit value for 
+    <console>:6: error: could not find implicit value for
      evidence parameter of type ClassManifest[U]
          def wrap[U](xs: Array[U]) = evenElems(xs)
                                           ^
-What happened here is that the `evenElems` demands a class manifest for the type parameter `U`, but none was found. The solution in this case is, of course, to demand another implicit class manifest for `U`. So the following works:
+여기에서 일어난 일은 `evenElems`는 타입 매개 변수 `U`에 대해서 클래스 매니페스트를 요청했지만, 아무 것도 발견되지 않았다. 물론 이러한 경우에 대한 해결책은 `U`에 대한 또 다른 암시적 클래스 매니페스트를 요청하는 것이다. 따라서 아래와 같이 동작한다:
 
     scala> def wrap[U: ClassManifest](xs: Array[U]) = evenElems(xs)
     wrap: [U](xs: Array[U])(implicit evidence$1: ClassManifest[U])Array[U]
 
-This example also shows that the context bound in the definition of `U` is just a shorthand for an implicit parameter named here `evidence$1` of type `ClassManifest[U]`.
+이 예시를 통해 `U`의 정의에 대한 문맥 범위가 `ClassManifest[U]` 타입의 `evidence$1`라는 이름의 암시적 매개 변수로 약칭한 것을 볼 수 있다.
 
-In summary, generic array creation demands class manifests. So whenever creating an array of a type parameter `T`, you also need to provide an implicit class manifest for `T`. The easiest way to do this is to declare the type parameter with a `ClassManifest` context bound, as in `[T: ClassManifest]`.
-
+요약하면, 제너릭 배열의 생성은 클래스 매니페스트를 요구한다. 그러므로 타입 매개 변수 `T`의 배열을 생성할 때, `T`에 대한 암시적 클래스 매니페스트를 제공해주어야 한다. 이를 위한 가장 쉬운 방법은, `[T: ClassManifest]` 처럼 문맥 범위 안에 타입 매개 변수와 함께 `ClassManifest`를 선언해주는 것이다.
