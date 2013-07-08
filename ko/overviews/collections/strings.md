@@ -6,7 +6,7 @@ disqus: true
 
 partof: collections
 num: 11
-languages: ko
+language: ko
 ---
 
 배열처럼, 문자열이 직접적으로 시퀀스인 것은 아니지만 시퀀스로 변환될 수 있으며 모든 시퀀스 연산을 지원한다. 다음은 문자열에서 호출할 수 있는 연산의 예를 보여준다. 

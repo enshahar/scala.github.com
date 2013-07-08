@@ -6,7 +6,7 @@ disqus: true
 
 partof: collections
 num: 10
-languages: ko
+language: ko
 ---
 
 [배열(Array)](http://www.scala-lang.org/api/{{ site.scala-version }}/scala/Array.html)은 스칼라에 있는 특별한 종류의 컬렉션이다. 한편, 스칼라 배열은 자바의 배열과 일대일 대응한다. 즉, 스칼라 배열 `Array[Int]`는 자바의 `int[]`로 표현되며, `Array[Double]`은 자바의 `double[]`로, `Array[String]`은 `Java String[]`로 표현될 수 있다. 그러나 이와 동시에, 스칼라 배열은 자바 배열 유사체보다 훨씬 많은 것을 제공한다. 첫 번째로, 스칼라 배열은 **제너릭(Generic)** 할 수 있다. 이는 `Array[T]`를 사용할 수 있다는 의미이며, `T`는 타입 매개 변수나 추상 타입을 의미한다. 두 번째로, 스칼라 배열은 스칼라 시퀀스와 호환된다. `Seq[T]`가 필요할 때, `Array[T]`를 전달할 수 있다는 것을 의미한다. 마지막으로, 스칼라 배열은 모든 시퀀스 연산을 지원한다. 직접 예시를 통해서 알아보자:
